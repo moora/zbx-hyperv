@@ -34,7 +34,7 @@ Param (
 )
 
 # Script version
-$VERSION_NUM="0.2.2"
+$VERSION_NUM="0.2.3"
 if ($version) {
     Write-Host $VERSION_NUM
     break
@@ -47,7 +47,8 @@ function Make-LLD() {
                                   @{Name = "{#VM.CLUSTERED}"; e={[int]$_.IsClustered}},
                                   @{Name = "{#VM.HOST}"; e={$_.ComputerName}},
                                   @{Name = "{#VM.GEN}"; e={$_.Generation}},
-                                  @{Name = "{#VM.ISREPLICA}"; e={[int]$_.ReplicationMode}}
+                                  @{Name = "{#VM.ISREPLICA}"; e={[int]$_.ReplicationMode}},
+                                  @{Name = "{#VM.NOTES}"; e={[int]$_.Notes}}
     return ConvertTo-Json @{"data" = [array]$vms} -Compress
 }
 
