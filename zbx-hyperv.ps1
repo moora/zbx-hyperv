@@ -34,7 +34,7 @@ Param (
 )
 
 # Script version
-$VERSION_NUM="0.2.3"
+$VERSION_NUM="0.2.4"
 if ($version) {
     Write-Host $VERSION_NUM
     break
@@ -48,7 +48,7 @@ function Make-LLD() {
                                   @{Name = "{#VM.HOST}"; e={$_.ComputerName}},
                                   @{Name = "{#VM.GEN}"; e={$_.Generation}},
                                   @{Name = "{#VM.ISREPLICA}"; e={[int]$_.ReplicationMode}},
-                                  @{Name = "{#VM.NOTES}"; e={[int]$_.Notes}}
+                                  @{Name = "{#VM.NOTES}"; e={$_.Notes}}
     return ConvertTo-Json @{"data" = [array]$vms} -Compress
 }
 
@@ -78,6 +78,10 @@ function Get-FullJSON() {
                                "ReplMode" = [int]$_.ReplicationMode;
                                "ReplState" = [int]$_.ReplicationState;
                                "ReplHealth" = [int]$_.ReplicationHealth;
+                               "StopAction" = [int]$_.AutomaticStopAction;
+                               "StartAction" = [int]$_.AutomaticStartAction;
+                               "CritErrAction" = [int]$_.AutomaticCriticalErrorAction;
+                               "IsClustered" = [int]$_.IsClustered
                                }
         $to_json += @{$_.VMName = $vm_data}
     }
