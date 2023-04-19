@@ -14,6 +14,28 @@ The script wrote with PowerShell and requires at least version 3.0 and Hyper-V m
 
 __Please, read [Requirements and Installation](https://github.com/asand3r/zbx-hyperv/wiki/Requirements-and-Installation) section in Wiki before use.__  
 
+To install the script you need to do some steps:
+
+1. Copy the script to folder where zabbix_agentd.exe installed. For example, in the template I'm using "C:\Program Files\Zabbix Agent\scripts";
+1. Add new UserParameter to zabbix_agentd.conf (you can find an example in zabbix_agentd_userparameter.txt file; in our environment we using "C:\Program Files\Zabbix Agent\userparameters" directory to store custom UserParameter files and including them in common Zabbix Agent config file with "Include" directive):
+
+`UserParameter=ms.hyperv[*],powershell -NoProfile -NoLogo -File "%ProgramFiles%\Zabbix Agent\scripts\zbx-hyperv.ps1" `
+1. You need to add an alias into zabbix config
+`Alias=service.discovery[hyperv]:service.discovery`
+
+1. Restart Zabbix Agent service:
+
+`PS C:\> Restart-Service "Zabbix Agent"`
+
+1. Make a test from a new items with zabbix_get utility:
+
+`[root@zabbix ~]# zabbix_get -s server01 -k 'ms.hyperv[lld]'`
+`{"data":[{"{#VM.NAME}":"vm01","{#VM.STATE}":"RUNNING","{#VM.VERSION}":"5.0","{#VM.CLUSTERED}":1,"{#VM.HOST}":"hv01","{#VM.GEN}":2}, ... }`
+
+1. Now it works, so you need to configure new discovery rules, items and trigger. You may use my template from sources as example, or use it out of box. Be careful, it works only with Zabbix Server 4.0 and above!
+
+
+
 ## Dependencies
  - PowerShell v3.0+
 
